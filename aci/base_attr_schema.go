@@ -2,14 +2,9 @@ package aci
 
 import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-func GetBaseAttrSchema() map[string]*schema.Schema {
+func GetAnnotationAttrSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"description": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Computed: true,
-		},
-		"annotation": &schema.Schema{
+		"annotation": {
 			Type:     schema.TypeString,
 			Optional: true,
 			Computed: true,
@@ -20,14 +15,31 @@ func GetBaseAttrSchema() map[string]*schema.Schema {
 	}
 }
 
+func GetDescriptionAttrSchema() map[string]*schema.Schema {
+	return map[string]*schema.Schema{
+		"description": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+		},
+	}
+}
+
 func GetAllowEmptyAttrSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"allow_empty_result": &schema.Schema{
+		"allow_empty_result": {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Default:  false,
 		},
 	}
+}
+
+func GetBaseAttrSchema() map[string]*schema.Schema {
+	return AppendAttrSchemas(
+		GetAnnotationAttrSchema(),
+		GetDescriptionAttrSchema(),
+	)
 }
 
 // AppendBaseAttrSchema adds the BaseAttr to any schema
