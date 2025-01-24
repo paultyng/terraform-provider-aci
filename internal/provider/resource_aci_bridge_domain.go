@@ -429,6 +429,46 @@ var FvRogueExceptionMacFvBDType = types.ObjectType{
 	},
 }
 
+func FvRogueExceptionMacFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(ctx context.Context, planValue, stateValue types.Set) basetypes.SetValue {
+	var planSetValues, stateSetValues []FvRogueExceptionMacFvBDResourceModel
+	stateValue.ElementsAs(ctx, &stateSetValues, false)
+	planValue.ElementsAs(ctx, &planSetValues, false)
+
+	// If the length of the state and plan values are different a change is already detected thus reflection can be skipped
+	if len(stateSetValues) == len(planSetValues) {
+		for index, stateValue := range stateSetValues {
+			nullInStateFound := false
+			if stateValue.Annotation.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Annotation = basetypes.NewStringNull()
+			}
+			if stateValue.Descr.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Descr = basetypes.NewStringNull()
+			}
+			if stateValue.Mac.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Mac = basetypes.NewStringNull()
+			}
+			if stateValue.Name.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Name = basetypes.NewStringNull()
+			}
+			if stateValue.NameAlias.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].NameAlias = basetypes.NewStringNull()
+			}
+			if !nullInStateFound {
+				// when there are no null fields we can conclude the version supports all attributes in set
+				break
+			}
+		}
+	}
+	planSet, _ := types.SetValueFrom(ctx, FvRogueExceptionMacFvBDType, planSetValues)
+	return planSet
+
+}
+
 // TagAnnotationFvRogueExceptionMacFvBDResourceModel describes the resource data model for the children without relation ships.
 type TagAnnotationFvRogueExceptionMacFvBDResourceModel struct {
 	Key   types.String `tfsdk:"key"`
@@ -730,6 +770,38 @@ var FvRsBDToNetflowMonitorPolFvBDType = types.ObjectType{
 	},
 }
 
+func FvRsBDToNetflowMonitorPolFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(ctx context.Context, planValue, stateValue types.Set) basetypes.SetValue {
+	var planSetValues, stateSetValues []FvRsBDToNetflowMonitorPolFvBDResourceModel
+	stateValue.ElementsAs(ctx, &stateSetValues, false)
+	planValue.ElementsAs(ctx, &planSetValues, false)
+
+	// If the length of the state and plan values are different a change is already detected thus reflection can be skipped
+	if len(stateSetValues) == len(planSetValues) {
+		for index, stateValue := range stateSetValues {
+			nullInStateFound := false
+			if stateValue.Annotation.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Annotation = basetypes.NewStringNull()
+			}
+			if stateValue.FltType.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].FltType = basetypes.NewStringNull()
+			}
+			if stateValue.TnNetflowMonitorPolName.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].TnNetflowMonitorPolName = basetypes.NewStringNull()
+			}
+			if !nullInStateFound {
+				// when there are no null fields we can conclude the version supports all attributes in set
+				break
+			}
+		}
+	}
+	planSet, _ := types.SetValueFrom(ctx, FvRsBDToNetflowMonitorPolFvBDType, planSetValues)
+	return planSet
+
+}
+
 // TagAnnotationFvRsBDToNetflowMonitorPolFvBDResourceModel describes the resource data model for the children without relation ships.
 type TagAnnotationFvRsBDToNetflowMonitorPolFvBDResourceModel struct {
 	Key   types.String `tfsdk:"key"`
@@ -804,6 +876,34 @@ var FvRsBDToOutFvBDType = types.ObjectType{
 		"annotations":     types.SetType{ElemType: TagAnnotationFvRsBDToOutFvBDType},
 		"tags":            types.SetType{ElemType: TagTagFvRsBDToOutFvBDType},
 	},
+}
+
+func FvRsBDToOutFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(ctx context.Context, planValue, stateValue types.Set) basetypes.SetValue {
+	var planSetValues, stateSetValues []FvRsBDToOutFvBDResourceModel
+	stateValue.ElementsAs(ctx, &stateSetValues, false)
+	planValue.ElementsAs(ctx, &planSetValues, false)
+
+	// If the length of the state and plan values are different a change is already detected thus reflection can be skipped
+	if len(stateSetValues) == len(planSetValues) {
+		for index, stateValue := range stateSetValues {
+			nullInStateFound := false
+			if stateValue.Annotation.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].Annotation = basetypes.NewStringNull()
+			}
+			if stateValue.TnL3extOutName.IsNull() {
+				nullInStateFound = true
+				planSetValues[index].TnL3extOutName = basetypes.NewStringNull()
+			}
+			if !nullInStateFound {
+				// when there are no null fields we can conclude the version supports all attributes in set
+				break
+			}
+		}
+	}
+	planSet, _ := types.SetValueFrom(ctx, FvRsBDToOutFvBDType, planSetValues)
+	return planSet
+
 }
 
 // TagAnnotationFvRsBDToOutFvBDResourceModel describes the resource data model for the children without relation ships.
@@ -1391,6 +1491,13 @@ type FvBDResourceModelV1 struct {
 type FvRsBDToNetflowMonitorPolFvBDResourceModelV1 struct {
 	FltType                 types.String `tfsdk:"flt_type"`
 	TnNetflowMonitorPolName types.String `tfsdk:"tn_netflow_monitor_pol_name"`
+}
+
+func getEmptyFvRsBDToNetflowMonitorPolFvBDResourceModelV1() FvRsBDToNetflowMonitorPolFvBDResourceModelV1 {
+	return FvRsBDToNetflowMonitorPolFvBDResourceModelV1{
+		FltType:                 basetypes.NewStringNull(),
+		TnNetflowMonitorPolName: basetypes.NewStringNull(),
+	}
 }
 
 func (r *FvBDResource) UpgradeState(ctx context.Context) map[int64]resource.StateUpgrader {
@@ -2009,6 +2116,7 @@ func setFvBDLegacyAttributes(ctx context.Context, diags *diag.Diagnostics, data,
 	data.DeprecatedFvRsABDPolMonPol = basetypes.NewStringNull()
 	data.DeprecatedFvRsBDToFhs = basetypes.NewStringNull()
 	data.DeprecatedFvRsBDToNdP = basetypes.NewStringNull()
+	DeprecatedFvRsBDToNetflowMonitorPolFvBDList := make([]FvRsBDToNetflowMonitorPolFvBDResourceModelV1, 0)
 	DeprecatedFvRsBDToOutFvBDList := make([]string, 0)
 	data.DeprecatedFvRsBDToProfile = basetypes.NewStringNull()
 	data.DeprecatedFvRsBDToRelayP = basetypes.NewStringNull()
@@ -2043,6 +2151,18 @@ func setFvBDLegacyAttributes(ctx context.Context, diags *diag.Diagnostics, data,
 							data.DeprecatedFvRsBDToNdP = basetypes.NewStringValue(childAttributeValue.(string))
 						}
 					}
+				}
+				if childClassName == "fvRsBDToNetflowMonitorPol" {
+					DeprecatedFvRsBDToNetflowMonitorPolFvBD := getEmptyFvRsBDToNetflowMonitorPolFvBDResourceModelV1()
+					for childAttributeName, childAttributeValue := range childAttributes {
+						if childAttributeName == "fltType" {
+							DeprecatedFvRsBDToNetflowMonitorPolFvBD.FltType = basetypes.NewStringValue(childAttributeValue.(string))
+						}
+						if childAttributeName == "tnNetflowMonitorPolName" {
+							DeprecatedFvRsBDToNetflowMonitorPolFvBD.TnNetflowMonitorPolName = basetypes.NewStringValue(childAttributeValue.(string))
+						}
+					}
+					DeprecatedFvRsBDToNetflowMonitorPolFvBDList = append(DeprecatedFvRsBDToNetflowMonitorPolFvBDList, DeprecatedFvRsBDToNetflowMonitorPolFvBD)
 				}
 				if childClassName == "fvRsBDToOut" {
 					for childAttributeName, childAttributeValue := range childAttributes {
@@ -2095,7 +2215,8 @@ func setFvBDLegacyAttributes(ctx context.Context, diags *diag.Diagnostics, data,
 				}
 			}
 		}
-		data.DeprecatedFvRsBDToNetflowMonitorPol = types.SetNull(deprecatedFvRsBDToNetflowMonitorPolType)
+		fvRsBDToNetflowMonitorPolSet, _ := types.SetValueFrom(ctx, data.DeprecatedFvRsBDToNetflowMonitorPol.ElementType(ctx), DeprecatedFvRsBDToNetflowMonitorPolFvBDList)
+		data.DeprecatedFvRsBDToNetflowMonitorPol = fvRsBDToNetflowMonitorPolSet
 		fvRsBDToOutSet, _ := types.SetValueFrom(ctx, data.DeprecatedFvRsBDToOut.ElementType(ctx), DeprecatedFvRsBDToOutFvBDList)
 		data.DeprecatedFvRsBDToOut = fvRsBDToOutSet
 	}
@@ -2321,6 +2442,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsBDToRelayP.ValueString()) == attributeValues.TnDhcpRelayPName.ValueString() && !attributeValues.TnDhcpRelayPName.IsNull() {
 					planData.DeprecatedFvRsBDToRelayP = stateData.DeprecatedFvRsBDToRelayP
 				}
+				var stateAttributeValue, planAttributeValue FvRsBDToRelayPFvBDResourceModel
+				stateData.FvRsBDToRelayP.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsBDToRelayP.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsBDToRelayPFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsBDToRelayPFvBDType)
+				}
+				FvRsBDToRelayPObject, _ := types.ObjectValueFrom(ctx, FvRsBDToRelayPFvBDType, planAttributeValue)
+				planData.FvRsBDToRelayP = FvRsBDToRelayPObject
 			}
 		} else if !configData.DeprecatedFvRsBDToRelayP.IsNull() {
 			var newAttributeValues FvRsBDToRelayPFvBDResourceModel
@@ -2359,6 +2491,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsBdToEpRet.ValueString()) == attributeValues.TnFvEpRetPolName.ValueString() && !attributeValues.TnFvEpRetPolName.IsNull() {
 					planData.DeprecatedFvRsBdToEpRet = stateData.DeprecatedFvRsBdToEpRet
 				}
+				var stateAttributeValue, planAttributeValue FvRsBdToEpRetFvBDResourceModel
+				stateData.FvRsBdToEpRet.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsBdToEpRet.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsBdToEpRetFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsBdToEpRetFvBDType)
+				}
+				FvRsBdToEpRetObject, _ := types.ObjectValueFrom(ctx, FvRsBdToEpRetFvBDType, planAttributeValue)
+				planData.FvRsBdToEpRet = FvRsBdToEpRetObject
 			}
 		} else if !configData.DeprecatedFvRsBdToEpRet.IsNull() {
 			var newAttributeValues FvRsBdToEpRetFvBDResourceModel
@@ -2398,6 +2541,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsBDToFhs.ValueString()) == attributeValues.TnFhsBDPolName.ValueString() && !attributeValues.TnFhsBDPolName.IsNull() {
 					planData.DeprecatedFvRsBDToFhs = stateData.DeprecatedFvRsBDToFhs
 				}
+				var stateAttributeValue, planAttributeValue FvRsBDToFhsFvBDResourceModel
+				stateData.FvRsBDToFhs.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsBDToFhs.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsBDToFhsFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsBDToFhsFvBDType)
+				}
+				FvRsBDToFhsObject, _ := types.ObjectValueFrom(ctx, FvRsBDToFhsFvBDType, planAttributeValue)
+				planData.FvRsBDToFhs = FvRsBDToFhsObject
 			}
 		} else if !configData.DeprecatedFvRsBDToFhs.IsNull() {
 			var newAttributeValues FvRsBDToFhsFvBDResourceModel
@@ -2436,6 +2590,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsIgmpsn.ValueString()) == attributeValues.TnIgmpSnoopPolName.ValueString() && !attributeValues.TnIgmpSnoopPolName.IsNull() {
 					planData.DeprecatedFvRsIgmpsn = stateData.DeprecatedFvRsIgmpsn
 				}
+				var stateAttributeValue, planAttributeValue FvRsIgmpsnFvBDResourceModel
+				stateData.FvRsIgmpsn.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsIgmpsn.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsIgmpsnFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsIgmpsnFvBDType)
+				}
+				FvRsIgmpsnObject, _ := types.ObjectValueFrom(ctx, FvRsIgmpsnFvBDType, planAttributeValue)
+				planData.FvRsIgmpsn = FvRsIgmpsnObject
 			}
 		} else if !configData.DeprecatedFvRsIgmpsn.IsNull() {
 			var newAttributeValues FvRsIgmpsnFvBDResourceModel
@@ -2539,6 +2704,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsMldsn.ValueString()) == attributeValues.TnMldSnoopPolName.ValueString() && !attributeValues.TnMldSnoopPolName.IsNull() {
 					planData.DeprecatedFvRsMldsn = stateData.DeprecatedFvRsMldsn
 				}
+				var stateAttributeValue, planAttributeValue FvRsMldsnFvBDResourceModel
+				stateData.FvRsMldsn.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsMldsn.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsMldsnFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsMldsnFvBDType)
+				}
+				FvRsMldsnObject, _ := types.ObjectValueFrom(ctx, FvRsMldsnFvBDType, planAttributeValue)
+				planData.FvRsMldsn = FvRsMldsnObject
 			}
 		} else if !configData.DeprecatedFvRsMldsn.IsNull() {
 			var newAttributeValues FvRsMldsnFvBDResourceModel
@@ -2577,6 +2753,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsABDPolMonPol.ValueString()) == attributeValues.TnMonEPGPolName.ValueString() && !attributeValues.TnMonEPGPolName.IsNull() {
 					planData.DeprecatedFvRsABDPolMonPol = stateData.DeprecatedFvRsABDPolMonPol
 				}
+				var stateAttributeValue, planAttributeValue FvRsABDPolMonPolFvBDResourceModel
+				stateData.FvRsABDPolMonPol.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsABDPolMonPol.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsABDPolMonPolFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsABDPolMonPolFvBDType)
+				}
+				FvRsABDPolMonPolObject, _ := types.ObjectValueFrom(ctx, FvRsABDPolMonPolFvBDType, planAttributeValue)
+				planData.FvRsABDPolMonPol = FvRsABDPolMonPolObject
 			}
 		} else if !configData.DeprecatedFvRsABDPolMonPol.IsNull() {
 			var newAttributeValues FvRsABDPolMonPolFvBDResourceModel
@@ -2615,6 +2802,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsBDToNdP.ValueString()) == attributeValues.TnNdIfPolName.ValueString() && !attributeValues.TnNdIfPolName.IsNull() {
 					planData.DeprecatedFvRsBDToNdP = stateData.DeprecatedFvRsBDToNdP
 				}
+				var stateAttributeValue, planAttributeValue FvRsBDToNdPFvBDResourceModel
+				stateData.FvRsBDToNdP.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsBDToNdP.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsBDToNdPFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsBDToNdPFvBDType)
+				}
+				FvRsBDToNdPObject, _ := types.ObjectValueFrom(ctx, FvRsBDToNdPFvBDType, planAttributeValue)
+				planData.FvRsBDToNdP = FvRsBDToNdPObject
 			}
 		} else if !configData.DeprecatedFvRsBDToNdP.IsNull() {
 			var newAttributeValues FvRsBDToNdPFvBDResourceModel
@@ -2653,6 +2851,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsBDToProfile.ValueString()) == attributeValues.TnRtctrlProfileName.ValueString() && !attributeValues.TnRtctrlProfileName.IsNull() {
 					planData.DeprecatedFvRsBDToProfile = stateData.DeprecatedFvRsBDToProfile
 				}
+				var stateAttributeValue, planAttributeValue FvRsBDToProfileFvBDResourceModel
+				stateData.FvRsBDToProfile.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsBDToProfile.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsBDToProfileFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsBDToProfileFvBDType)
+				}
+				FvRsBDToProfileObject, _ := types.ObjectValueFrom(ctx, FvRsBDToProfileFvBDType, planAttributeValue)
+				planData.FvRsBDToProfile = FvRsBDToProfileObject
 			}
 		} else if !configData.DeprecatedFvRsBDToProfile.IsNull() {
 			var newAttributeValues FvRsBDToProfileFvBDResourceModel
@@ -2692,6 +2901,17 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				if GetMOName(stateData.DeprecatedFvRsCtx.ValueString()) == attributeValues.TnFvCtxName.ValueString() && !attributeValues.TnFvCtxName.IsNull() {
 					planData.DeprecatedFvRsCtx = stateData.DeprecatedFvRsCtx
 				}
+				var stateAttributeValue, planAttributeValue FvRsCtxFvBDResourceModel
+				stateData.FvRsCtx.As(ctx, &stateAttributeValue, basetypes.ObjectAsOptions{})
+				planData.FvRsCtx.As(ctx, &planAttributeValue, basetypes.ObjectAsOptions{})
+				if stateAttributeValue.TagAnnotation.IsNull() && attributeValues.TagAnnotation.IsNull() {
+					planAttributeValue.TagAnnotation = basetypes.NewSetUnknown(TagAnnotationFvRsCtxFvBDType)
+				}
+				if stateAttributeValue.TagTag.IsNull() && attributeValues.TagTag.IsNull() {
+					planAttributeValue.TagTag = basetypes.NewSetUnknown(TagTagFvRsCtxFvBDType)
+				}
+				FvRsCtxObject, _ := types.ObjectValueFrom(ctx, FvRsCtxFvBDType, planAttributeValue)
+				planData.FvRsCtx = FvRsCtxObject
 			}
 		} else if !configData.DeprecatedFvRsCtx.IsNull() {
 			var newAttributeValues FvRsCtxFvBDResourceModel
@@ -2720,27 +2940,33 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 			planData.DeprecatedFvRsCtx = stateData.DeprecatedFvRsCtx
 		}
 
-		planData.DeprecatedFvRsBDToNetflowMonitorPol = types.SetNull(deprecatedFvRsBDToNetflowMonitorPolType)
-		if !configData.DeprecatedFvRsBDToNetflowMonitorPol.IsNull() {
+		if !configData.FvRsBDToNetflowMonitorPol.IsNull() {
+			FvRsBDToNetflowMonitorPolList := make([]FvRsBDToNetflowMonitorPolFvBDResourceModelV1, 0)
+			var attributeValues []FvRsBDToNetflowMonitorPolFvBDResourceModel
+			planData.FvRsBDToNetflowMonitorPol.ElementsAs(ctx, &attributeValues, false)
+			if len(attributeValues) > 0 {
+				for _, attributeValue := range attributeValues {
+					FvRsBDToNetflowMonitorPol := FvRsBDToNetflowMonitorPolFvBDResourceModelV1{
+						FltType:                 attributeValue.FltType,
+						TnNetflowMonitorPolName: attributeValue.TnNetflowMonitorPolName,
+					}
+					FvRsBDToNetflowMonitorPolList = append(FvRsBDToNetflowMonitorPolList, FvRsBDToNetflowMonitorPol)
+				}
+
+				DeprecatedFvRsBDToNetflowMonitorPolSet, _ := types.SetValueFrom(ctx, deprecatedFvRsBDToNetflowMonitorPolType, FvRsBDToNetflowMonitorPolList)
+				planData.DeprecatedFvRsBDToNetflowMonitorPol = DeprecatedFvRsBDToNetflowMonitorPolSet
+			}
+		} else if !configData.DeprecatedFvRsBDToNetflowMonitorPol.IsNull() {
 			FvRsBDToNetflowMonitorPolList := make([]FvRsBDToNetflowMonitorPolFvBDResourceModel, 0)
 			var attributeValues []FvRsBDToNetflowMonitorPolFvBDResourceModelV1
-			var newAttributeValues []FvRsBDToNetflowMonitorPolFvBDResourceModel
-			configData.DeprecatedFvRsBDToNetflowMonitorPol.ElementsAs(ctx, &attributeValues, false)
-			annotationValue := planData.Annotation
-			if stateData != nil {
-				stateData.FvRsBDToNetflowMonitorPol.ElementsAs(ctx, &newAttributeValues, false)
-				for _, newAttributeValue := range newAttributeValues {
-					annotationValue = newAttributeValue.Annotation
-				}
-			}
+			planData.DeprecatedFvRsBDToNetflowMonitorPol.ElementsAs(ctx, &attributeValues, false)
 			for _, attributeValue := range attributeValues {
 				tnNetflowMonitorPolNameValue := basetypes.NewStringUnknown()
 				if !attributeValue.TnNetflowMonitorPolName.IsUnknown() {
 					tnNetflowMonitorPolNameValue = basetypes.NewStringValue(GetMOName(attributeValue.TnNetflowMonitorPolName.ValueString()))
 				}
-
 				FvRsBDToNetflowMonitorPol := FvRsBDToNetflowMonitorPolFvBDResourceModel{
-					Annotation:              annotationValue,
+					Annotation:              planData.Annotation,
 					FltType:                 attributeValue.FltType,
 					TnNetflowMonitorPolName: tnNetflowMonitorPolNameValue,
 				}
@@ -2750,12 +2976,31 @@ func (r *FvBDResource) ModifyPlan(ctx context.Context, req resource.ModifyPlanRe
 				FvRsBDToNetflowMonitorPol.TagTag = tagTagFvRsBDToNetflowMonitorPolFvBDValue
 				FvRsBDToNetflowMonitorPolList = append(FvRsBDToNetflowMonitorPolList, FvRsBDToNetflowMonitorPol)
 			}
-
 			FvRsBDToNetflowMonitorPolSet, _ := types.SetValueFrom(ctx, FvRsBDToNetflowMonitorPolFvBDType, FvRsBDToNetflowMonitorPolList)
 			planData.FvRsBDToNetflowMonitorPol = FvRsBDToNetflowMonitorPolSet
+		} else if stateData != nil { // used to replace use state for unknown
+			planData.DeprecatedFvRsBDToNetflowMonitorPol = stateData.DeprecatedFvRsBDToNetflowMonitorPol
+		}
+
+		// Workaround to compare the state with plan with readonly set from state to avoid plan changes
+		if stateData != nil {
+			setFvBDReadOnlyInPlan(planData, stateData)
 		}
 
 		resp.Diagnostics.Append(resp.Plan.Set(ctx, &planData)...)
+	}
+}
+func setFvBDReadOnlyInPlan(planData *FvBDResourceModel, stateData *FvBDResourceModel) {
+	// Set read-only fields in planData from stateData
+	planData.PcTag = stateData.PcTag
+	planData.Scope = stateData.Scope
+	planData.Seg = stateData.Seg
+
+	// Compare the string representation of the planData and stateData because structs cannot be compated directly
+	if fmt.Sprintf("%s", planData) != fmt.Sprintf("%s", stateData) {
+		planData.PcTag = basetypes.NewStringUnknown()
+		planData.Scope = basetypes.NewStringUnknown()
+		planData.Seg = basetypes.NewStringUnknown()
 	}
 }
 
@@ -3274,11 +3519,15 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				MarkdownDescription: `The multiple destination forwarding method for L2 Multicast, Broadcast, and Link Layer traffic types.`,
 			},
 			"name": schema.StringAttribute{
-				Required: true,
+				Optional: true,
+				Computed: true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
 					SetToStringNullWhenStateIsNullPlanIsUnknownDuringUpdate(),
 					stringplanmodifier.RequiresReplace(),
+				},
+				Validators: []validator.String{
+					MakeStringRequired(),
 				},
 				MarkdownDescription: `The name of the Bridge Domain object.`,
 			},
@@ -3464,6 +3713,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3498,6 +3748,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3534,6 +3785,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:            true,
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
+					SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(FvRogueExceptionMacFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -3590,6 +3842,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -3624,6 +3877,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -3685,6 +3939,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3719,6 +3974,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3779,6 +4035,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3813,6 +4070,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3873,6 +4131,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3907,6 +4166,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -3943,6 +4203,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:            true,
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
+					SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(FvRsBDToNetflowMonitorPolFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -3984,6 +4245,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -4018,6 +4280,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -4055,6 +4318,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:            true,
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
+					SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(FvRsBDToOutFvBDSetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -4084,6 +4348,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -4118,6 +4383,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Computed:            true,
 							PlanModifiers: []planmodifier.Set{
 								setplanmodifier.UseStateForUnknown(),
+								SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 							},
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -4187,6 +4453,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4221,6 +4488,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4281,6 +4549,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4315,6 +4584,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4386,6 +4656,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4420,6 +4691,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4480,6 +4752,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4514,6 +4787,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4574,6 +4848,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4608,6 +4883,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4668,6 +4944,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4702,6 +4979,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 						Computed:            true,
 						PlanModifiers: []planmodifier.Set{
 							setplanmodifier.UseStateForUnknown(),
+							SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 						},
 						NestedObject: schema.NestedAttributeObject{
 							Attributes: map[string]schema.Attribute{
@@ -4738,6 +5016,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:            true,
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
+					SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -4772,6 +5051,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				Computed:            true,
 				PlanModifiers: []planmodifier.Set{
 					setplanmodifier.UseStateForUnknown(),
+					SetToSetNullWhenStateIsNullPlanIsUnknownDuringUpdate(nil),
 				},
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -4813,6 +5093,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.ConflictsWith(path.Expressions{
 									path.MatchRoot("relation_to_netflow_monitor_policies"),
 								}...),
+								MakeStringRequired(),
 							},
 						},
 						"tn_netflow_monitor_pol_name": schema.StringAttribute{
@@ -4823,6 +5104,7 @@ func (r *FvBDResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 								stringvalidator.ConflictsWith(path.Expressions{
 									path.MatchRoot("relation_to_netflow_monitor_policies"),
 								}...),
+								MakeStringRequired(),
 							},
 						},
 					},
